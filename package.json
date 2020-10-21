@@ -70,6 +70,7 @@
   "scripts": {
     "build": "npm install && grunt",
     "start": "grunt watch",
+    "test-browserstack": "karma start",
     "test:browserless": "grunt && grunt test:slow",
     "test:browser": "grunt && grunt karma:main",
     "test:esmodules": "grunt && grunt karma:esmodules",
