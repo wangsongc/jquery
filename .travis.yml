@@ -6,6 +6,7 @@ node_js:
 - "14"
 env:
   - NPM_SCRIPT=test:browserless
+
 jobs:
   include:
     - name: "Browser tests: full build, Chrome & Firefox stable"
@@ -51,5 +52,11 @@ jobs:
         - BROWSERS="FirefoxHeadless"
       addons:
         firefox: latest-esr
+    - name: "BrowserStack tests: karma:tests"
+      node_js: "12"
+      env:
+        - NPM_SCRIPT="test:browserstack"
+        - secure: fdwLqg74ANLAKO3SIib3g8iXD4GB2hD+lgPYDTMJ2qoh1BwkNr4PWnGpyieQBe2CyZac4rIH1fNtYntPoYNizDk7TWfaRhFmf6sCYdEyvyW/HSkdRg4bqYHoIzFBCzVQ0TxOUBQepM1xwa1hcFe6Ovi7uebuDVK/jwBn+4CQkNV7jMHbLKtrNVwGuaZmakKYwQIqPl1qV/TimWq7eoVenxLb4ABURXkEhDOEWI//vIbNU7jJaZohxLRjFHBy29+fwsWv3BAJ18K6023AAF1l3vilBI8vinrDTkuiAGxIYru2C34p9BsYHMdL6ZTnkyxHHGmE+JUOEGodVcWL5SiuKDwuLo+AcyieYGirsWiSFjQSqUoJSyPz+Qf8o83aAtOdpciFgeJckurkujiKsOGMm4aG69q13vk02MMOTpG8WngpABR8V2BCjQsRzZE45ZUMkMZyUqw8izobk6ALzhQwf11fftU3Ndy1LBDzTtVeR7OwMn34QyW+bgVpx5D1Md7VYHLOqjAaGMjvsXzBsqCR6rYwkKfQ5QmuxRzflc/cMaxmdumpJjqX/v6KZ0MaKsbNpwggSvbJzpY3c5F0HXvvFoWH74UifobcflLbHu46nk4xm5+skFVVBWz/0u3YTiZ4VYwUBNd0bMt3YI9CcJgTPzSTzVIOWWKp1MvwABflsrA=
+        - secure: HM7SyVFbwSNrQLH0XWZhyhPxHAvPLyq0nJDERIgbrQ7XD8/adfTarjywy/zhzBl/OhbFC52Xq9RH3AY0NQ48m+Z7JERdIwWWWxA8LIh6CY4yFwJOT1OeXNMcA0RwBNajHhd8H3YOR/tUgXIGnvCworHM1TSIiHD1MapIHYlldzD1KN9Pk2ngkvJfzwYmQm8pKaGrWLEamMLY3SfSwI5/Wfo2V3DbQdzQmMzo0sj/NktORe5G/NWZwXYEuX+m4DxbZJALpbQelraK3iUycn5UYlTIzNHV+80KIkWw2hue42rma+2boaru5Dr93zaQai9kx0xA7p+pew/Uz05/J9DEZ+GEXRi1BOa0ILNOipVO3YW3g5W3kUUInwGUclQjnUXF1DmzzyzeuGw+Dqf8DqWXnO/k/y9uUVOsk9CMuwz5/XOoCe7Op+uL05lkf7XlsL2D+yeb72Xj28YOlyitH8H7UupmJpbumdjEji/vjMOr1KvI0QLHbrtjuARwouzQn8qf+x4cZL3UEbqXECsOu2dcOuqrf9COaEXCdK8bReLsPSWr31Dbwxkcgu0rZJr+a+GAKOZXl9FIsXKIXYtu2lNTQCc92RIdkSInpMcMPlLdtb9TwWU2JQK0qj378qUK0bFyDpBwo74SUHz99xW5co3WSGMI1IaPpMoKZ1MoNCPqFcI=   
 script:
   - npm run $NPM_SCRIPT
