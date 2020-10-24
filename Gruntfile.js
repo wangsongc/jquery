@@ -235,7 +235,36 @@ module.exports = function( grunt ) {
 					}
 				}
 			},
+            browserstack: {
+                reporters: [ "progress", "BrowserStack" ],
+                hostname: "bs-local.com",
+                port: 9876,
+                browserStack: {
+                    username: "wangsongc1",
+                    accessKey: "yUceog3xetzq3ymiMKTC",
+                    apiClientEndpoint: "https://api.browserstack.com"
+                },
+				customLaunchers: {
+                    bs_firefox_mac: {
+                        base: "BrowserStack",
+                        browser: "firefox",
+                        browser_version: "70.0",
+                        os: "OS X",
+                        os_version: "High Sierra"
+                    }
+				},
+				captureTimeout: 3e5,
+                browserDisconnectTolerance: 0,
+				browserDisconnectTimeout: 3e5,
+				browserSocketTimeout: 1.2e5,
+                browserNoActivityTimeout: 3e5,
 
+				// browsers: ['bs_firefox_mac', 'bs_iphoneX'],
+                browsers: [ "bs_firefox_mac" ],
+
+				// browsers: [ "ChromeHeadless","FirefoxHeadless" ],
+				singleRun: true
+            },    
 			jsdom: {
 				options: {
 					files: [
