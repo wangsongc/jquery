@@ -236,6 +236,10 @@ module.exports = function( grunt ) {
 				}
 			},
             browserstack: {
+				options: {
+					configFile: "test/karma/karma.conf.js",
+					singleRun: true
+				},
                 reporters: [ "progress", "BrowserStack" ],
                 hostname: "bs-local.com",
                 port: 9876,
@@ -246,12 +250,19 @@ module.exports = function( grunt ) {
                 },
 				customLaunchers: {
                     bs_firefox_mac: {
-                        base: "BrowserStack",
-                        browser: "firefox",
-                        browser_version: "70.0",
-                        os: "OS X",
-                        os_version: "High Sierra"
-                    }
+                        base: 'BrowserStack',
+                        browser: 'firefox',
+                        browser_version: '70.0',
+                        os: 'OS X',
+                        os_version: 'High Sierra'
+                      },
+                      bs_chrome_win10: {
+                          base: "BrowserStack",
+                          browser: "chrome",
+                          browser_version: "86.0",
+                          os: "Windows",
+                          os_version: "10"
+                      }
 				},
 				captureTimeout: 3e5,
                 browserDisconnectTolerance: 0,
@@ -260,11 +271,11 @@ module.exports = function( grunt ) {
                 browserNoActivityTimeout: 3e5,
 
 				// browsers: ['bs_firefox_mac', 'bs_iphoneX'],
-                browsers: [ "bs_firefox_mac" ],
+                browsers: [ "bs_firefox_mac","bs_chrome_win10" ],
 
 				// browsers: [ "ChromeHeadless","FirefoxHeadless" ],
 				singleRun: true
-            },    
+            },
 			jsdom: {
 				options: {
 					files: [
