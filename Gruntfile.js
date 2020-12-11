@@ -22,6 +22,65 @@ module.exports = function( grunt ) {
 		grunt.option( "filename", "jquery.js" );
 	}
 
+	var isBrowserStack = process.env.BROWSER_STACK_USERNAME && process.env.BROWSER_STACK_ACCESS_KEY,
+	browsers = {
+		phantom: [ "ChromeHeadless" ],
+		desktop: [],
+		android: [],
+		ios: [],
+		old: {
+			firefox: [],
+			chrome: [],
+			safari: [],
+			ie: [],
+			opera: [],
+			android: []
+		}
+	};
+
+	// if Browserstack is set up, assume we can use it
+	if ( isBrowserStack ) {
+
+		// See https://github.com/jquery/sizzle/wiki/Sizzle-Documentation#browsers
+
+		browsers.desktop = [
+			"bs_chrome-45", // shares V8 with Node.js 4 LTS
+
+			"bs_chrome-86", "bs_chrome-87",
+
+			"bs_firefox-60", "bs_firefox-68", "bs_firefox-78", // Firefox ESR
+			"bs_firefox-82", "bs_firefox-83",
+
+			"bs_edge-15", "bs_edge-16", "bs_edge-17", "bs_edge-18",
+
+			"bs_ie-9", "bs_ie-10", "bs_ie-11",
+
+			"bs_opera-71", "bs_opera-72",
+
+			// Real Safari 6.1 and 7.0 are not available
+			"bs_safari-6.0", "bs_safari-8.0", "bs_safari-9.1", "bs_safari-10.1",
+			"bs_safari-11.1", "bs_safari-12.1", "bs_safari-13.1"
+		];
+
+		browsers.ios = [
+			"bs_ios-9.3", "bs_ios-10", "bs_ios-11", "bs_ios-12", "bs_ios-13", "bs_ios-14"
+		];
+		browsers.android = [
+			"bs_android-4.0", "bs_android-4.1", "bs_android-4.2",
+			"bs_android-4.3", "bs_android-4.4"
+		];
+
+		browsers.old = {
+			firefox: [ "bs_firefox-3.6" ],
+			chrome: [ "bs_chrome-16" ],
+			safari: [ "bs_safari-4.0", "bs_safari-5.0", "bs_safari-5.1" ],
+			ie: [ "bs_ie-7", "bs_ie-8" ],
+			opera: [ "bs_opera-11.6", "bs_opera-12.16" ],
+			ios: [ "bs_ios-5.1", "bs_ios-6.0", "bs_ios-7.0", "bs_ios-8.3" ],
+			android: [ "bs_android-2.3" ]
+		};
+	}
+
 	grunt.initConfig( {
 		pkg: grunt.file.readJSON( "package.json" ),
 		dst: readOptionalJSON( "dist/.destination.json" ),
@@ -133,73 +192,7 @@ module.exports = function( grunt ) {
 		},
 		karma: {
 			options: {
-				customContextFile: "test/karma.context.html",
-				customDebugFile: "test/karma.debug.html",
-				customLaunchers: {
-					ChromeHeadlessNoSandbox: {
-						base: "ChromeHeadless",
-						flags: [ "--no-sandbox" ]
-					}
-				},
-				frameworks: [ "qunit" ],
-				middleware: [ "mockserver" ],
-				plugins: [
-					"karma-*",
-					{
-						"middleware:mockserver": [
-							"factory",
-							require( "./test/middleware-mockserver.js" )
-						]
-					}
-				],
-				client: {
-					qunit: {
-
-						// We're running `QUnit.start()` ourselves via `loadTests()`
-						// in test/jquery.js
-						autostart: false
-					}
-				},
-				files: [
-					"test/data/jquery-1.9.1.js",
-					"node_modules/sinon/pkg/sinon.js",
-					"node_modules/native-promise-only/lib/npo.src.js",
-					"node_modules/requirejs/require.js",
-					"test/data/testinit.js",
-
-					"test/jquery.js",
-
-					{
-						pattern: "dist/jquery.*",
-						included: false,
-						served: true,
-						nocache: true
-					},
-					{
-						pattern: "src/**",
-						type: "module",
-						included: false,
-						served: true,
-						nocache: true
-					},
-					{
-						pattern: "amd/**",
-						included: false,
-						served: true,
-						nocache: true
-					},
-					{ pattern: "node_modules/**", included: false, served: true },
-					{
-						pattern: "test/**/*.@(js|css|jpg|html|xml|svg)",
-						included: false,
-						served: true,
-						nocache: true
-					}
-				],
-				reporters: [ "dots" ],
-				autoWatch: false,
-				concurrency: 3,
-				captureTimeout: 20 * 1000,
+				configFile: "test/karma/karma.conf.js",
 				singleRun: true
 			},
 			main: {
@@ -235,47 +228,75 @@ module.exports = function( grunt ) {
 					}
 				}
 			},
-            browserstack: {
-				options: {
-					configFile: "test/karma/karma.conf.js",
-					singleRun: true
-				},
-                reporters: [ "progress", "BrowserStack" ],
-                hostname: "bs-local.com",
-                port: 9876,
-                browserStack: {
-                    username: "wangsongc1",
-                    accessKey: "yUceog3xetzq3ymiMKTC",
-                    apiClientEndpoint: "https://api.browserstack.com"
-                },
-				customLaunchers: {
-                    bs_firefox_mac: {
-                        base: 'BrowserStack',
-                        browser: 'firefox',
-                        browser_version: '70.0',
-                        os: 'OS X',
-                        os_version: 'High Sierra'
-                      },
-                      bs_chrome_win10: {
-                          base: "BrowserStack",
-                          browser: "chrome",
-                          browser_version: "86.0",
-                          os: "Windows",
-                          os_version: "10"
-                      }
-				},
-				captureTimeout: 3e5,
-                browserDisconnectTolerance: 0,
-				browserDisconnectTimeout: 3e5,
-				browserSocketTimeout: 1.2e5,
-                browserNoActivityTimeout: 3e5,
+			phantom: {
+				browsers: [ "ChromeHeadless" ]
 
-				// browsers: ['bs_firefox_mac', 'bs_iphoneX'],
-                browsers: [ "bs_firefox_mac","bs_chrome_win10" ],
+				// browsers: browsers.phantom
+			},
+			watch: {
+					background: true,
+					singleRun: false,
+					browsers: browsers.phantom
+				},
+			phantom: {
+					browsers: browsers.phantom
 
-				// browsers: [ "ChromeHeadless","FirefoxHeadless" ],
-				singleRun: true
-            },
+					// browsers: browsers.phantom
+				},
+			desktop: {
+
+					// browsers: browsers.desktop
+					browsers: browsers.desktop
+				},
+			android: {
+					browsers: browsers.android
+				},
+			ios: {
+					browsers: browsers.ios
+				},
+			oldIe: {
+					browsers: browsers.old.ie,
+
+					// Support: IE <=8 only
+					// Force use of JSONP polling
+					transports: [ "polling" ],
+					forceJSONP: true
+				},
+			oldOpera: {
+					browsers: browsers.old.opera
+				},
+			oldFirefox: {
+					browsers: browsers.old.firefox
+				},
+			oldChrome: {
+					browsers: browsers.old.chrome
+				},
+			oldSafari: {
+					browsers: browsers.old.safari
+				},
+			oldAndroid: {
+					browsers: browsers.old.android
+				},
+			oldIos: {
+					browsers: browsers.old.ios
+				},
+			all: {
+					browsers: browsers.phantom.concat(
+						browsers.desktop,
+
+						browsers.old.firefox,
+						browsers.old.chrome,
+						browsers.old.safari,
+						browsers.old.ie,
+						browsers.old.opera,
+
+						browsers.ios,
+						browsers.android,
+
+						browsers.old.ios,
+						browsers.old.android
+					)
+				},
 			jsdom: {
 				options: {
 					files: [
