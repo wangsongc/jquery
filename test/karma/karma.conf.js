@@ -5,8 +5,10 @@ var grunt = require( "grunt" );
 module.exports = function( config ) {
 	var isTravis = process.env.TRAVIS,
 		dateString = grunt.config( "dateString" ),
-		isBrowserStack = !!( process.env.BROWSER_STACK_USERNAME &&
-			process.env.BROWSER_STACK_ACCESS_KEY ),
+
+		// isBrowserStack = !!( process.env.BROWSER_STACK_USERNAME &&
+		// 	process.env.BROWSER_STACK_ACCESS_KEY ),
+		isBrowserStack = true,
 		hostName = isBrowserStack ? "bs-local.com" : "localhost";
 
 	config.set( {
