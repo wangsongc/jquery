@@ -4,76 +4,22 @@ var grunt = require( "grunt" );
 
 module.exports = function( config ) {
 	var isTravis = process.env.TRAVIS,
-		dateString = grunt.config( "dateString" ),
-
-		// isBrowserStack = !!( process.env.BROWSER_STACK_USERNAME &&
-		// 	process.env.BROWSER_STACK_ACCESS_KEY ),
-		isBrowserStack = true,
+		isBrowserStack = !!( process.env.BROWSER_STACK_USERNAME &&
+			process.env.BROWSER_STACK_ACCESS_KEY ),
 		hostName = isBrowserStack ? "bs-local.com" : "localhost";
 
 	config.set( {
-		// browserstack: {
-			
-		// },
-
+	
 		// Can't specify path as "../../test" which would be intuitive
 		// because if we do, karma will make paths outside "test" folder absolute
 		// that will break iframe tests
 		basePath: "../../",
-
-
-		// files: [
-		// 	"external/jquery/jquery.js",
-		// 	"dist/sizzle.js",
-		// 	"test/data/testingPseudos.js",
-
-		// 	// Base fixtures
-		// 	{
-		// 		pattern: "test/data/fixtures.html",
-		// 		watched: false
-		// 	},
-
-		// 	"test/data/testinit.js",
-		// 	"test/data/testrunner.js",
-		// 	"test/data/empty.js",
-
-		// 	"test/unit/selector.js",
-		// 	"test/unit/utilities.js",
-		// 	"test/unit/extending.js",
-
-		// 	// For iframe tests
-		// 	{
-		// 		pattern: "test/data/mixed_sort.html",
-		// 		watched: false,
-		// 		included: false
-		// 	},
-		// 	{
-		// 		pattern: "test/data/noConflict.html",
-		// 		watched: false,
-		// 		included: false
-		// 	}
-		// ],
-
-		// preprocessors: {
-
-		// 	// mixed_sort.html, noConflict.html downloaded through iframe inclusion
-		// 	// so it should not be preprocessed
-		// 	"test/data/mixed_sort.html": [],
-		// 	"test/data/noConflict.html": [],
-		// 	"test/data/fixtures.html": [ "html2js" ]
-		// },
 
 		// Add BrowserStack launchers
 		customLaunchers: require( "./lanucher" ),
 
 		customContextFile: "test/karma.context.html",
 				customDebugFile: "test/karma.debug.html",
-				// customLaunchers: {
-				// 	ChromeHeadlessNoSandbox: {
-				// 		base: "ChromeHeadless",
-				// 		flags: [ "--no-sandbox" ]
-				// 	}
-				// },
 				frameworks: [ "qunit" ],
 				middleware: [ "mockserver" ],
 				plugins: [
@@ -130,12 +76,10 @@ module.exports = function( config ) {
 					}
 				],
 
-				// reporters: [ "dots" ],
-				autoWatch: false,
-				concurrency: 3,
+		autoWatch: false,
+		concurrency: 5,
 
-				// captureTimeout: 20 * 1000,
-				singleRun: true,
+		singleRun: true,
 		// Make travis output less verbose
 		reporters: isTravis ? "dots" : "progress",
 

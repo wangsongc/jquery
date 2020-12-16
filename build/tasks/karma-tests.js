@@ -7,21 +7,15 @@ module.exports = function( grunt ) {
 	// The task runs tests in various browser sets but does it sequentially in
 	// separate processes to avoid Karma bugs that cause browsers from previous
 	// sets to somehow still be waited on during subsequent runs, failing the build.
+
 	grunt.registerTask( "karma-tests", "Run unit tests sequentially",
 		async function( isBrowserStack ) {
 			const done = this.async();
-
 			const tasks = isBrowserStack ? [
-				"karma:phantom", "karma:desktop",
-
-				"karma:oldIe", "karma:oldFirefox", "karma:oldChrome",
-				"karma:oldSafari", "karma:oldOpera",
-
-				"karma:ios", "karma:oldIos"
-
-				// See #314 :-(
-				// "karma:android", "karma:oldAndroid"
-			] : [ "karma:phantom" ];
+				"karma:main", "karma:firefox",
+				"karma:chrome", "karma:edge", "karma:ie",
+				"karma:opera", "karma:safari"
+			] : [ "karma:main" ];
 
 			for ( let task of tasks ) {
 				const command = `grunt ${ task }`;

@@ -16,17 +16,25 @@ module.exports = function( grunt ) {
 		gzip = require( "gzip-js" ),
 		isCi = process.env.TRAVIS || process.env.GITHUB_ACTION,
 		ciBrowsers = process.env.BROWSERS && process.env.BROWSERS.split( "," ),
+		isBrowserStack = !!( process.env.BROWSER_STACK_USERNAME &&
+			process.env.BROWSER_STACK_ACCESS_KEY ),
+		browsers = {
+			headless: [ "FirefoxHeadless" ],
+			firefox: [],
+			chrome: [],
+			edge: [],
+			ie: [],
+			opera: [],
+			safari: []
+		},
 		CLIEngine = require( "eslint" ).CLIEngine;
 
 	if ( !grunt.option( "filename" ) ) {
 		grunt.option( "filename", "jquery.js" );
 	}
 
-	var isBrowserStack = process.env.BROWSER_STACK_USERNAME && process.env.BROWSER_STACK_ACCESS_KEY,
-
-	// var isBrowserStack = true,
 	browsers = {
-		phantom: [ "FirefoxHeadless" ],
+		headless: [ "FirefoxHeadless" ],
 		firefox: [],
 		chrome: [],
 		edge: [],
@@ -36,17 +44,13 @@ module.exports = function( grunt ) {
 	};
 
 	// if Browserstack is set up, assume we can use it
-
 	if ( isBrowserStack ) {
-
-		// See https://github.com/jquery/sizzle/wiki/Sizzle-Documentation#browsers
 
 		browsers.firefox = [
 			"bs_firefox-48", "bs_firefox-60", "bs_firefox-78", "bs_firefox-82", "bs_firefox-83"
 		];
 
 		browsers.chrome = [
-			
 			"bs_chrome-86", "bs_chrome-87", "bs_android-8.0"
 		];
 
@@ -65,7 +69,6 @@ module.exports = function( grunt ) {
 		browsers.safari = [
 			"bs_safari-12.1", "bs_safari-13.1"
 		];
-		
 	}
 
 	grunt.initConfig( {
@@ -183,7 +186,7 @@ module.exports = function( grunt ) {
 				singleRun: true
 			},
 			main: {
-				browsers: isCi && ciBrowsers || [ "FirefoxHeadless" ]
+				browsers: isCi && ciBrowsers || browsers.headless
 			},
 			esmodules: {
 				browsers: isCi && ciBrowsers || [ "ChromeHeadless" ],
@@ -215,20 +218,7 @@ module.exports = function( grunt ) {
 					}
 				}
 			},
-
-			watch: {
-					background: true,
-					singleRun: false,
-					browsers: browsers.phantom
-				},
-			phantom: {
-					browsers: browsers.phantom
-
-					// browsers: browsers.phantom
-				},
 			firefox: {
-
-					// browsers: browsers.desktop
 					browsers: browsers.firefox
 				},
 			chrome: {
@@ -252,7 +242,7 @@ module.exports = function( grunt ) {
 					browsers: browsers.safari
 			},
 			all: {
-					browsers: browsers.phantom.concat(
+					browsers: browsers.headless.concat(
 						browsers.firefox,
 						browsers.chrome,
 						browsers.edge,
@@ -365,6 +355,10 @@ module.exports = function( grunt ) {
 	grunt.registerTask( "test:slow", [
 		"promises_aplus_tests",
 		"karma:jsdom"
+	] );
+
+	grunt.registerTask( "karma:tests", [
+		`karma-tests:${ isBrowserStack ? "browserstack" : "" }`
 	] );
 
 	grunt.registerTask( "test:prepare", [
