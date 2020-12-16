@@ -332,29 +332,29 @@ this.loadTests = function() {
 				// A special module with basic tests, meant for not fully
 				// supported environments like jsdom. We run it everywhere,
 				// though, to make sure tests are not broken.
-				"unit/basic.js"
+				"unit/basic.js",
 
-				// "unit/core.js",
-				// "unit/callbacks.js",
-				// "unit/deferred.js",
-				// "unit/deprecated.js",
-				// "unit/support.js",
-				// "unit/data.js",
-				// "unit/queue.js",
-				// "unit/attributes.js",
-				// "unit/event.js",
-				// "unit/selector.js",
-				// "unit/traversing.js",
-				// "unit/manipulation.js",
-				// "unit/wrap.js",
-				// "unit/css.js",
-				// "unit/serialize.js",
-				// "unit/ajax.js",
-				// "unit/effects.js",
-				// "unit/offset.js",
-				// "unit/dimensions.js",
-				// "unit/animation.js",
-				// "unit/tween.js"
+				"unit/core.js",
+				"unit/callbacks.js",
+				"unit/deferred.js",
+				"unit/deprecated.js",
+				"unit/support.js",
+				"unit/data.js",
+				"unit/queue.js",
+				"unit/attributes.js",
+				"unit/event.js",
+				"unit/selector.js",
+				"unit/traversing.js",
+				"unit/manipulation.js",
+				"unit/wrap.js",
+				"unit/css.js",
+				"unit/serialize.js",
+				"unit/ajax.js",
+				"unit/effects.js",
+				"unit/offset.js",
+				"unit/dimensions.js",
+				"unit/animation.js",
+				"unit/tween.js"
 			];
 
 		// Ensure load order (to preserve test numbers)
